@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shutterbug: Pixel Warfare 3D</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div id="damageFlash"></div>
+
+  <div id="hud">
+    <div id="crosshair"><div class="cv"></div><div class="ch"></div><div class="cd"></div></div>
+
+    <div id="playerInfo">
+      <div class="hud-box">
+        <span class="label">P1: RIO</span>
+        <div class="hp-bar"><div class="hp-fill" id="hpFill"></div></div>
+        <span class="hp-text" id="hpText">100/100</span>
+      </div>
+      <div class="hud-box"><span class="label">LIVES</span><span class="value" id="livesText">♥♥♥</span></div>
+    </div>
+
+    <div id="scoreInfo">
+      <div class="hud-box"><span class="label">SCORE</span><span class="value score-val" id="scoreText">0</span></div>
+      <div class="hud-box"><span class="label">LEVEL</span><span class="value" id="levelText">1: City Assault</span></div>
+      <div class="hud-box"><span class="label">KILLS</span><span class="value" id="killsText">0</span></div>
+    </div>
+
+    <div id="weaponInfo">
+      <div class="hud-box"><span class="label" id="weaponName">PISTOL</span><span class="ammo-text" id="ammoText">∞</span></div>
+    </div>
+
+    <div id="bossBar" class="hidden">
+      <span class="boss-label" id="bossName">BOSS HP</span>
+      <div class="boss-hp-bar"><div class="boss-hp-fill" id="bossHpFill"></div></div>
+    </div>
+
+    <div id="message" class="hidden"></div>
+    <div id="ammoSlots"></div>
+  </div>
+
+  <div id="titleScreen">
+    <h1>SHUTTERBUG</h1>
+    <h2>PIXEL WARFARE <span class="glow">3D</span></h2>
+    <p class="pulse">CLICK TO START</p>
+    <div class="controls-info">
+      <p>WASD Move &nbsp;|&nbsp; Mouse Aim &nbsp;|&nbsp; Click Shoot</p>
+      <p>Space Jump &nbsp;|&nbsp; Shift Sprint &nbsp;|&nbsp; 1-4 Weapons &nbsp;|&nbsp; R Reload</p>
+    </div>
+    <p class="dev">DEVELOPER BUILD v2.0</p>
+  </div>
+
+  <div id="gameOverScreen" class="hidden">
+    <h1 class="red">GAME OVER</h1>
+    <p class="final-score">FINAL SCORE: <span id="finalScore">0</span></p>
+    <p class="final-score">KILLS: <span id="finalKills">0</span></p>
+    <p class="pulse">CLICK TO RESTART</p>
+  </div>
+
+  <div id="victoryScreen" class="hidden">
+    <h1 class="gold">VICTORY!</h1>
+    <p class="final-score">FINAL SCORE: <span id="victoryScore">0</span></p>
+    <p class="final-score">KILLS: <span id="victoryKills">0</span></p>
+    <p class="pulse">CLICK TO PLAY AGAIN</p>
+  </div>
+
+  <script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
+  </script>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
