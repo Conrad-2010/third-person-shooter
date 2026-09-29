@@ -1,4 +1,4 @@
-# third-person-shooter
+
 # Shutterbug: Pixel Warfare 3D
 
 A third-person 3D action shooter built with **Three.js**. Battle through
