@@ -457,7 +457,7 @@ function updatePlayer(dt){
   player.rotation.y=yaw;
 
   vel.y-=20*dt;
-  if(keys["Space"]&&onGround){ vel.y=8.5; onGround=false; }
+  if((keys["Space"]||keys["Fire"]===true&&keys["Jump"])&&onGround){ vel.y=8.5; onGround=false; }
   player.position.y+=vel.y*dt;
   if(player.position.y<=0){ player.position.y=0; vel.y=0; onGround=true; }
 }
