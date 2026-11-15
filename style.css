@@ -81,7 +81,7 @@ html,body{height:100%;overflow:hidden;font-family:'Courier New',monospace;color:
 .action-pad #fireTouch{width:76px;height:76px;border-radius:50%;background:rgba(180,35,35,.75);font-size:15px}
 .action-pad #jumpTouch{background:rgba(30,90,150,.75)}
 .touch-hint{position:absolute;right:14px;bottom:190px;font:10px Arial;letter-spacing:1px;color:#dbeafe;text-shadow:0 1px 4px #000}
-@media (pointer:coarse),(max-width:800px){#mobileControls.active{display:block}#playerInfo{top:8px;left:8px}#scoreInfo{top:8px;right:8px;gap:3px}.hud-box{padding:4px 7px}.label{font-size:9px}.value{font-size:12px}.hp-bar{width:100px;height:8px}#weaponInfo{bottom:14px;right:105px}.ammo-text{font-size:16px}#crosshair{display:none}.controls-info{font-size:11px;padding:0 18px}#titleScreen h1{font-size:2rem;letter-spacing:.12em}#titleScreen h2{font-size:1rem;letter-spacing:.15em}}
+@media (pointer:coarse),(max-width:800px){#mobileControls{display:block}#playerInfo{top:8px;left:8px}#scoreInfo{top:8px;right:8px;gap:3px}.hud-box{padding:4px 7px}.label{font-size:9px}.value{font-size:12px}.hp-bar{width:100px;height:8px}#weaponInfo{bottom:14px;right:105px}.ammo-text{font-size:16px}#crosshair{display:none}.controls-info{font-size:11px;padding:0 18px}#titleScreen h1{font-size:2rem;letter-spacing:.12em}#titleScreen h2{font-size:1rem;letter-spacing:.15em}}
 
 
 /* Android full-screen layout and reliable touch interaction */
