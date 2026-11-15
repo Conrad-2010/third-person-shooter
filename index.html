@@ -9,6 +9,11 @@
 <body>
   <canvas id="gameCanvas"></canvas>
   <div id="damageFlash"></div>
+  <div id="mobileControls" aria-label="Touch controls">
+    <div class="move-pad"><button data-key="KeyW">▲</button><div><button data-key="KeyA">◀</button><button data-key="KeyS">▼</button><button data-key="KeyD">▶</button></div></div>
+    <div class="action-pad"><button id="reloadTouch">RELOAD</button><button id="jumpTouch">JUMP</button><button id="fireTouch">FIRE</button></div>
+    <div class="touch-hint">DRAG RIGHT SIDE TO LOOK</div>
+  </div>
 
   <div id="hud">
     <div id="crosshair"><div class="cv"></div><div class="ch"></div><div class="cd"></div></div>
@@ -44,7 +49,7 @@
   <div id="titleScreen">
     <h1>SHUTTERBUG</h1>
     <h2>PIXEL WARFARE <span class="glow">3D</span></h2>
-    <p class="pulse">CLICK TO START</p>
+    <p class="pulse">TAP / CLICK TO DEPLOY</p>
     <div class="controls-info">
       <p>WASD Move &nbsp;|&nbsp; Mouse Aim &nbsp;|&nbsp; Click Shoot</p>
       <p>Space Jump &nbsp;|&nbsp; Shift Sprint &nbsp;|&nbsp; 1-4 Weapons &nbsp;|&nbsp; R Reload</p>
