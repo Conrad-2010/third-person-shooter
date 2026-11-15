@@ -70,3 +70,15 @@ html,body{height:100%;overflow:hidden;font-family:'Courier New',monospace;color:
   #titleScreen h1{font-size:2.2rem}
   .hp-bar{width:110px}
 }
+
+
+/* Mobile combat controls */
+#mobileControls{display:none;position:fixed;inset:0;z-index:15;pointer-events:none}
+#mobileControls button{pointer-events:auto;border:1px solid rgba(255,255,255,.45);background:rgba(8,16,28,.68);color:#fff;border-radius:14px;font:700 13px Arial;backdrop-filter:blur(8px);touch-action:none;min-width:48px;min-height:46px}
+.move-pad{position:absolute;left:14px;bottom:22px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.move-pad>div{display:flex;gap:5px}
+.action-pad{position:absolute;right:14px;bottom:22px;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.action-pad #fireTouch{width:76px;height:76px;border-radius:50%;background:rgba(180,35,35,.75);font-size:15px}
+.action-pad #jumpTouch{background:rgba(30,90,150,.75)}
+.touch-hint{position:absolute;right:14px;bottom:190px;font:10px Arial;letter-spacing:1px;color:#dbeafe;text-shadow:0 1px 4px #000}
+@media (pointer:coarse),(max-width:800px){#mobileControls.active{display:block}#playerInfo{top:8px;left:8px}#scoreInfo{top:8px;right:8px;gap:3px}.hud-box{padding:4px 7px}.label{font-size:9px}.value{font-size:12px}.hp-bar{width:100px;height:8px}#weaponInfo{bottom:14px;right:105px}.ammo-text{font-size:16px}#crosshair{display:none}.controls-info{font-size:11px;padding:0 18px}#titleScreen h1{font-size:2rem;letter-spacing:.12em}#titleScreen h2{font-size:1rem;letter-spacing:.15em}}
