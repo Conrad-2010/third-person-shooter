@@ -32,7 +32,7 @@ let state = "title";
 let level = 0, score = 0, kills = 0, lives = 3;
 let hp = 100, yaw = 0, pitch = -0.15;
 let vel = new THREE.Vector3(), onGround = true, locked = false;
-let lastShot = 0, wIdx = 0;
+let lastShot = 0, wIdx = 0, reloadUntil = 0;
 let ammo = WEAPONS.map(w => w.ammo);
 let bossActive = false, bossRef = null;
 const enemies = [], bullets = [], eBullets = [], particles = [], pickups = [];
@@ -43,7 +43,9 @@ const keys = {};
 // ═══════════════════════════════════════════════
 const canvas = document.getElementById("gameCanvas");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.enabled = true;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
@@ -267,7 +269,7 @@ function spawnBullet(from,dir,dmg,color,speed=80){
   const m=new THREE.Mesh(new THREE.SphereGeometry(0.12,6,6),
     new THREE.MeshBasicMaterial({color}));
   m.position.copy(from); scene.add(m);
-  bullets.push({mesh:m,dir:dir.clone().normalize().multiplyScalar(speed),dmg,life:2});
+  bullets.push({mesh:m,dir:dir.clone().normalize().multiplyScalar(speed),dmg,color,life:2});
 }
 
 function spawnEBullet(from,dir,dmg){
@@ -361,7 +363,7 @@ addEventListener("keydown",e=>{
   if(e.code==="Digit2") wIdx=1;
   if(e.code==="Digit3") wIdx=2;
   if(e.code==="Digit4") wIdx=3;
-  if(e.code==="KeyR") ammo[wIdx]=WEAPONS[wIdx].ammo;
+  if(e.code==="KeyR") reloadWeapon();
 });
 
 canvas.addEventListener("click",()=>{
@@ -385,11 +387,20 @@ canvas.addEventListener("mousedown",e=>{
   if(e.button===0) shoot();
 });
 
+function reloadWeapon(){
+  const w=WEAPONS[wIdx];
+  if(w.ammo===Infinity || ammo[wIdx]>=w.ammo || performance.now()<reloadUntil) return;
+  reloadUntil=performance.now()+Math.max(850,w.rate*1800);
+  showMessage("RELOADING...",900);
+  setTimeout(()=>{ if(state==="playing"){ammo[wIdx]=w.ammo; showMessage("MAGAZINE READY",900);} },Math.max(850,w.rate*1800));
+}
+
 function shoot(){
   const w=WEAPONS[wIdx];
   const now=performance.now()/1000;
   if(now-lastShot<w.rate) return;
-  if(ammo[wIdx]<=0){ showMessage("Out of ammo! Press R to reload",1500); return; }
+  if(performance.now()<reloadUntil) return;
+  if(ammo[wIdx]<=0){ showMessage("MAG EMPTY — RELOAD",1500); reloadWeapon(); return; }
   lastShot=now;
   if(ammo[wIdx]!==Infinity) ammo[wIdx]--;
 
@@ -516,7 +527,7 @@ function updateBullets(dt){
       const hitR=e.isBoss?3:1.2;
       if(d<hitR){
         e.hp-=b.dmg;
-        burst(b.mesh.position,WEAPONS[wIdx].color,5,4);
+        burst(b.mesh.position,b.color||0xffcc66,5,4);
         hit=true;
         if(e.hp<=0){
           const c=e.group.children[0]?.material?.color?.getHex?.()||0xff4444;
@@ -670,7 +681,7 @@ function startGame(){
   ["titleScreen","gameOverScreen","victoryScreen"].forEach(id=>
     document.getElementById(id).classList.add("hidden")
   );
-  level=0; score=0; kills=0; lives=3; hp=100; wIdx=0;
+  level=0; score=0; kills=0; lives=3; hp=100; wIdx=0; reloadUntil=0;\n  Object.keys(keys).forEach(k=>keys[k]=false);
   ammo=WEAPONS.map(w=>w.ammo);
   player.position.set(0,0,0);
   enemies.forEach(e=>scene.remove(e.group)); enemies.length=0;
