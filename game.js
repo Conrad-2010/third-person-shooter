@@ -728,7 +728,8 @@ function startGame(){
   ["titleScreen","gameOverScreen","victoryScreen"].forEach(id=>
     document.getElementById(id).classList.add("hidden")
   );
-  level=0; score=0; kills=0; lives=3; hp=100; wIdx=0; reloadUntil=0;\n  Object.keys(keys).forEach(k=>keys[k]=false);
+  level=0; score=0; kills=0; lives=3; hp=100; wIdx=0; reloadUntil=0;
+  Object.keys(keys).forEach(k=>keys[k]=false);
   ammo=WEAPONS.map(w=>w.ammo);
   player.position.set(0,0,0);
   enemies.forEach(e=>scene.remove(e.group)); enemies.length=0;
@@ -740,7 +741,7 @@ function startGame(){
   buildLevel(level);
   spawnWave();
   state="playing";
-  canvas.requestPointerLock();
+  if(!matchMedia("(pointer: coarse)").matches) canvas.requestPointerLock?.();
 }
 
 // initial environment
