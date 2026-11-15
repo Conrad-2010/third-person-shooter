@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Shutterbug: Pixel Warfare 3D</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <canvas id="gameCanvas"></canvas>
+  <button id="fullscreenBtn" type="button" aria-label="Enter fullscreen">⛶ FULLSCREEN</button>
   <div id="damageFlash"></div>
   <div id="mobileControls" aria-label="Touch controls">
     <div class="move-pad"><button data-key="KeyW">▲</button><div><button data-key="KeyA">◀</button><button data-key="KeyS">▼</button><button data-key="KeyD">▶</button></div></div>
@@ -49,7 +50,8 @@
   <div id="titleScreen">
     <h1>SHUTTERBUG</h1>
     <h2>PIXEL WARFARE <span class="glow">3D</span></h2>
-    <p class="pulse">TAP / CLICK TO DEPLOY</p>
+    <p class="pulse">TAP ANYWHERE TO DEPLOY</p>
+    <p class="mobile-start-hint">Tap to start • Use the on-screen controls</p>
     <div class="controls-info">
       <p>WASD Move &nbsp;|&nbsp; Mouse Aim &nbsp;|&nbsp; Click Shoot</p>
       <p>Space Jump &nbsp;|&nbsp; Shift Sprint &nbsp;|&nbsp; 1-4 Weapons &nbsp;|&nbsp; R Reload</p>
@@ -61,14 +63,14 @@
     <h1 class="red">GAME OVER</h1>
     <p class="final-score">FINAL SCORE: <span id="finalScore">0</span></p>
     <p class="final-score">KILLS: <span id="finalKills">0</span></p>
-    <p class="pulse">CLICK TO RESTART</p>
+    <p class="pulse">TAP TO RESTART</p>
   </div>
 
   <div id="victoryScreen" class="hidden">
     <h1 class="gold">VICTORY!</h1>
     <p class="final-score">FINAL SCORE: <span id="victoryScore">0</span></p>
     <p class="final-score">KILLS: <span id="victoryKills">0</span></p>
-    <p class="pulse">CLICK TO PLAY AGAIN</p>
+    <p class="pulse">TAP TO PLAY AGAIN</p>
   </div>
 
   <script type="importmap">
