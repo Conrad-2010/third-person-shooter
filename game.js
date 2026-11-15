@@ -368,8 +368,54 @@ addEventListener("keydown",e=>{
 
 canvas.addEventListener("click",()=>{
   if(state==="title"||state==="gameover"||state==="victory"){ startGame(); return; }
-  canvas.requestPointerLock();
+  if(!matchMedia("(pointer: coarse)").matches) canvas.requestPointerLock?.();
 });
+["titleScreen","gameOverScreen","victoryScreen"].forEach(id=>{
+  const screenEl=document.getElementById(id);
+  screenEl.addEventListener("click",()=>{if(state!=="playing")startGame();});
+  screenEl.addEventListener("touchend",e=>{if(state!=="playing"){e.preventDefault();startGame();}},{passive:false});
+});
+const fullscreenBtn=document.getElementById("fullscreenBtn");
+async function enterFullscreen(){
+  try{
+    const root=document.documentElement;
+    if(!document.fullscreenElement && root.requestFullscreen) await root.requestFullscreen();
+    else if(!document.fullscreenElement && root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+    if(screen.orientation?.lock) screen.orientation.lock("landscape").catch(()=>{});
+  }catch(err){showMessage("Try your browser menu → Add to Home screen",2500);}
+}
+fullscreenBtn.addEventListener("click",enterFullscreen);
+fullscreenBtn.addEventListener("touchend",e=>{e.preventDefault();enterFullscreen();},{passive:false});
+document.querySelectorAll("[data-key]").forEach(el=>{
+  const key=el.dataset.key;
+  const down=e=>{e.preventDefault();keys[key]=true;el.setPointerCapture?.(e.pointerId);};
+  const up=e=>{e.preventDefault();keys[key]=false;};
+  el.addEventListener("pointerdown",down);
+  ["pointerup","pointercancel","lostpointercapture"].forEach(t=>el.addEventListener(t,up));
+});
+const fireTouch=document.getElementById("fireTouch");
+fireTouch.addEventListener("pointerdown",e=>{e.preventDefault();keys.Fire=true;fireTouch.setPointerCapture?.(e.pointerId);});
+["pointerup","pointercancel","lostpointercapture"].forEach(t=>fireTouch.addEventListener(t,()=>keys.Fire=false));
+const jumpTouch=document.getElementById("jumpTouch");
+jumpTouch.addEventListener("pointerdown",e=>{e.preventDefault();keys.Space=true;});
+["pointerup","pointercancel","lostpointercapture"].forEach(t=>jumpTouch.addEventListener(t,()=>keys.Space=false));
+document.getElementById("reloadTouch").addEventListener("pointerdown",e=>{e.preventDefault();reloadWeapon();});
+let lookPointer=null,lastTouchX=0,lastTouchY=0;
+canvas.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="touch"&&state==="playing"&&e.clientX>innerWidth*0.38){
+    lookPointer=e.pointerId;lastTouchX=e.clientX;lastTouchY=e.clientY;
+    canvas.setPointerCapture?.(e.pointerId);
+  }
+});
+canvas.addEventListener("pointermove",e=>{
+  if(e.pointerType==="touch"&&e.pointerId===lookPointer&&state==="playing"){
+    const dx=e.clientX-lastTouchX,dy=e.clientY-lastTouchY;
+    yaw-=dx*0.008;pitch=Math.max(-0.6,Math.min(0.5,pitch-dy*0.006));
+    lastTouchX=e.clientX;lastTouchY=e.clientY;
+  }
+});
+["pointerup","pointercancel"].forEach(t=>canvas.addEventListener(t,e=>{if(e.pointerId===lookPointer)lookPointer=null;}));
+
 
 document.addEventListener("pointerlockchange",()=>{
   locked=document.pointerLockElement===canvas;
@@ -383,7 +429,7 @@ document.addEventListener("mousemove",e=>{
 });
 
 canvas.addEventListener("mousedown",e=>{
-  if(!locked||state!=="playing") return;
+  if(state!=="playing"||(!locked&&!matchMedia("(pointer: coarse)").matches)) return;
   if(e.button===0) shoot();
 });
 
@@ -649,6 +695,7 @@ function animate(){
   const dt=Math.min(clock.getDelta(),0.05);
 
   if(state==="playing"){
+    if(keys.Fire) shoot();
     updatePlayer(dt);
     updateEnemies(dt);
     updateBullets(dt);
