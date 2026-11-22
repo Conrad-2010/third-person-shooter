@@ -31,7 +31,7 @@ const LEVELS = [
 let state = "title";
 let level = 0, score = 0, kills = 0, lives = 3;
 let hp = 100, yaw = 0, pitch = -0.15;
-let vel = new THREE.Vector3(), onGround = true, locked = false;
+let vel = new THREE.Vector3(), horizontalVelocity = new THREE.Vector3(), onGround = true, locked = false;
 let lastShot = 0, wIdx = 0, reloadUntil = 0;
 let ammo = WEAPONS.map(w => w.ammo);
 let bossActive = false, bossRef = null;
@@ -47,18 +47,26 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.12;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(72, 1, 0.1, 300);
 const clock = new THREE.Clock();
 
-const amb = new THREE.AmbientLight(0x4466aa, 0.5);
+const amb = new THREE.HemisphereLight(0xc7ddff, 0x303020, 1.05);
 scene.add(amb);
+const fillLight = new THREE.DirectionalLight(0x9dbbdf, 0.35);
+fillLight.position.set(-18, 12, -10);
+scene.add(fillLight);
 const sun = new THREE.DirectionalLight(0xfff0dd, 1.3);
 sun.position.set(15, 25, 12);
 sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.bias = -0.00015;
+sun.shadow.normalBias = 0.025;
+sun.shadow.radius = 4;
 const sc = sun.shadow.camera;
 sc.near=0.5; sc.far=80; sc.left=-40; sc.right=40; sc.top=40; sc.bottom=-40;
 scene.add(sun);
@@ -480,7 +488,10 @@ function updateCamera(dt){
     height+pitch*5,
     -Math.cos(yaw)*dist
   );
+  const moving = keys.KeyW || keys.KeyA || keys.KeyS || keys.KeyD || keys.ArrowUp || keys.ArrowDown || keys.ArrowLeft || keys.ArrowRight;
+  const bob = moving && onGround ? Math.sin(clock.elapsedTime * 10) * 0.045 : 0;
   const target=player.position.clone().add(offset);
+  target.y += bob;
   camPos.lerp(target,1-Math.pow(0.001,dt));
   camera.position.copy(camPos);
   camera.lookAt(player.position.x,player.position.y+1.5,player.position.z);
@@ -498,9 +509,10 @@ function updatePlayer(dt){
   if(keys["KeyS"]||keys["ArrowDown"]) move.sub(fwd);
   if(keys["KeyD"]||keys["ArrowRight"]) move.add(right);
   if(keys["KeyA"]||keys["ArrowLeft"]) move.sub(right);
-  if(move.length()>0) move.normalize().multiplyScalar(speed*dt);
-  player.position.add(move);
-  player.rotation.y=yaw;
+  if(move.length()>0) move.normalize().multiplyScalar(speed);
+  horizontalVelocity.lerp(move, 1 - Math.exp(-10 * dt));
+  player.position.addScaledVector(horizontalVelocity, dt);
+  player.rotation.y += Math.atan2(Math.sin(yaw-player.rotation.y), Math.cos(yaw-player.rotation.y)) * Math.min(1, dt * 12);
 
   vel.y-=20*dt;
   if((keys["Space"]||keys["Fire"]===true&&keys["Jump"])&&onGround){ vel.y=8.5; onGround=false; }
