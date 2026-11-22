@@ -109,3 +109,31 @@ body:-webkit-full-screen #fullscreenBtn{display:none}
   .action-pad #fireTouch{width:82px;height:82px}
   .touch-hint{bottom:calc(env(safe-area-inset-bottom,0px) + 195px)}
 }
+
+
+/* Realism polish: restrained glass HUD and cinematic screen treatment */
+#gameCanvas{filter:saturate(.92) contrast(1.04)}
+#hud:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.28) 100%);
+}
+.hud-box{
+  background:rgba(8,13,24,.72);
+  border-color:rgba(180,205,235,.22);
+  box-shadow:0 8px 24px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.06);
+}
+.label{letter-spacing:.12em;text-shadow:0 1px 3px #000}
+#message{
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
+  text-shadow:0 2px 5px rgba(0,0,0,.55);
+}
+#titleScreen,#gameOverScreen,#victoryScreen{
+  background:
+    radial-gradient(ellipse at 50% 38%,rgba(31,54,83,.72),rgba(3,7,16,.96) 72%),
+    linear-gradient(135deg,#101a2b,#05070d);
+}
+#mobileControls button{
+  box-shadow:0 6px 18px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.12);
+  border-color:rgba(220,235,255,.34);
+}
+#mobileControls button:active{background:rgba(70,105,145,.82);transform:scale(.96)}
