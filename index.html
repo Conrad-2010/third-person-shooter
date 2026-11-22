@@ -1,81 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <title>Shutterbug: Pixel Warfare 3D</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#111914">
+<title>Frontier Command — Strategy Map</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="gameCanvas"></canvas>
-  <button id="fullscreenBtn" type="button" aria-label="Enter fullscreen">⛶ FULLSCREEN</button>
-  <div id="damageFlash"></div>
-  <div id="mobileControls" aria-label="Touch controls">
-    <div class="move-pad"><button data-key="KeyW">▲</button><div><button data-key="KeyA">◀</button><button data-key="KeyS">▼</button><button data-key="KeyD">▶</button></div></div>
-    <div class="action-pad"><button id="reloadTouch">RELOAD</button><button id="jumpTouch">JUMP</button><button id="fireTouch">FIRE</button></div>
-    <div class="touch-hint">DRAG RIGHT SIDE TO LOOK</div>
-  </div>
-
-  <div id="hud">
-    <div id="crosshair"><div class="cv"></div><div class="ch"></div><div class="cd"></div></div>
-
-    <div id="playerInfo">
-      <div class="hud-box">
-        <span class="label">P1: RIO</span>
-        <div class="hp-bar"><div class="hp-fill" id="hpFill"></div></div>
-        <span class="hp-text" id="hpText">100/100</span>
-      </div>
-      <div class="hud-box"><span class="label">LIVES</span><span class="value" id="livesText">♥♥♥</span></div>
+<main id="app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">FC</span><div><strong>FRONTIER COMMAND</strong><small>REGIONAL STRATEGY SIMULATOR</small></div></div>
+    <div class="resources">
+      <div><small>DAY</small><b id="day">01</b></div>
+      <div><small>SUPPLIES</small><b id="supplies">640</b></div>
+      <div><small>FUEL</small><b id="fuel">280</b></div>
+      <div><small>INFLUENCE</small><b id="influence">72</b></div>
     </div>
-
-    <div id="scoreInfo">
-      <div class="hud-box"><span class="label">SCORE</span><span class="value score-val" id="scoreText">0</span></div>
-      <div class="hud-box"><span class="label">LEVEL</span><span class="value" id="levelText">1: City Assault</span></div>
-      <div class="hud-box"><span class="label">KILLS</span><span class="value" id="killsText">0</span></div>
+    <button id="endTurn" class="primary">END DAY <span>→</span></button>
+  </header>
+  <section class="workspace">
+    <div class="map-wrap">
+      <canvas id="map" aria-label="Interactive regional strategy map"></canvas>
+      <div class="map-stamp"><b>WESTERN FRONTIER</b><span>TACTICAL OVERVIEW · 1:250 000</span></div>
+      <div class="map-tools"><button id="zoomIn" aria-label="Zoom in">+</button><button id="zoomOut" aria-label="Zoom out">−</button><button id="resetView" aria-label="Reset map view">⌖</button></div>
+      <div class="legend"><span><i class="blue"></i> YOUR ADMINISTRATION</span><span><i class="gold"></i> PARTNER REGION</span><span><i class="green"></i> FOREST</span><span><i class="road"></i> ROAD NETWORK</span></div>
+      <div id="toast" class="toast">Select a settlement or logistics unit</div>
     </div>
-
-    <div id="weaponInfo">
-      <div class="hud-box"><span class="label" id="weaponName">PISTOL</span><span class="ammo-text" id="ammoText">∞</span></div>
-    </div>
-
-    <div id="bossBar" class="hidden">
-      <span class="boss-label" id="bossName">BOSS HP</span>
-      <div class="boss-hp-bar"><div class="boss-hp-fill" id="bossHpFill"></div></div>
-    </div>
-
-    <div id="message" class="hidden"></div>
-    <div id="ammoSlots"></div>
-  </div>
-
-  <div id="titleScreen">
-    <h1>SHUTTERBUG</h1>
-    <h2>PIXEL WARFARE <span class="glow">3D</span></h2>
-    <p class="pulse">TAP ANYWHERE TO DEPLOY</p>
-    <p class="mobile-start-hint">Tap to start • Use the on-screen controls</p>
-    <div class="controls-info">
-      <p>WASD Move &nbsp;|&nbsp; Mouse Aim &nbsp;|&nbsp; Click Shoot</p>
-      <p>Space Jump &nbsp;|&nbsp; Shift Sprint &nbsp;|&nbsp; 1-4 Weapons &nbsp;|&nbsp; R Reload</p>
-    </div>
-    <p class="dev">DEVELOPER BUILD v2.0</p>
-  </div>
-
-  <div id="gameOverScreen" class="hidden">
-    <h1 class="red">GAME OVER</h1>
-    <p class="final-score">FINAL SCORE: <span id="finalScore">0</span></p>
-    <p class="final-score">KILLS: <span id="finalKills">0</span></p>
-    <p class="pulse">TAP TO RESTART</p>
-  </div>
-
-  <div id="victoryScreen" class="hidden">
-    <h1 class="gold">VICTORY!</h1>
-    <p class="final-score">FINAL SCORE: <span id="victoryScore">0</span></p>
-    <p class="final-score">KILLS: <span id="victoryKills">0</span></p>
-    <p class="pulse">TAP TO PLAY AGAIN</p>
-  </div>
-
-  <script type="importmap">
-  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
-  </script>
-  <script type="module" src="game.js"></script>
-</body>
-</html>
+    <aside class="sidepanel">
+      <div class="panel-head"><span>FIELD INTELLIGENCE</span><span class="live-dot">● LIVE</span></div>
+      <section class="selected-card">
+        <div class="eyebrow" id="itemType">REGION OVERVIEW</div>
+        <h1 id="itemName">Western Frontier</h1>
+        <p id="itemDesc">A connected region of towns, farms, forests and river crossings. Plan supply routes and develop settlements.</p>
+        <div class="stats" id="itemStats"><div><small>SETTLEMENTS</small><b>08</b></div><div><small>REGION STATUS</small><b>STABLE</b></div></div>
+      </section>
+      <section class="panel-section"><div class="section-title">REGIONAL NETWORK</div><div class="network-row"><span>Road access</span><b>GOOD</b></div><div class="meter"><i style="width:78%"></i></div><div class="network-row"><span>Supply coverage</span><b id="coverageText">64%</b></div><div class="meter"><i id="coverageBar" style="width:64%"></i></div><div class="network-row"><span>Public confidence</span><b id="confidence">81%</b></div><div class="meter"><i id="confidenceBar" style="width:81%"></i></div></section>
+      <section class="panel-section"><div class="section-title">AVAILABLE ORDERS</div>
+        <button class="order" id="developBtn"><span class="order-icon">⌂</span><span><b>Develop settlement</b><small>Improve local services · 80 supplies</small></span><span>›</span></button>
+        <button class="order" id="supplyBtn"><span class="order-icon">▣</span><span><b>Dispatch supplies</b><small>Support selected location · 35 supplies</small></span><span>›</span></button>
+        <button class="order" id="routeBtn"><span class="order-icon">⌁</span><span><b>Plan a route</b><small>Connect two logistics hubs</small></span><span>›</span></button>
+      </section>
+      <section class="panel-section activity"><div class="section-title">REGIONAL REPORT</div><div id="log"><p><time>08:00</time> Operations centre online.</p><p><time>08:05</time> Regional network stable.</p></div></section>
+      <footer>FRONTIER COMMAND <span>BUILD 1.0.0</span></footer>
+    </aside>
+  </section>
+</main>
+<script src="game.js"></script>
+</body></html>
