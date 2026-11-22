@@ -1,38 +1,19 @@
+# Frontier Command — Regional Strategy Simulator
 
-# Shutterbug: Pixel Warfare 3D
+A browser-based, top-down regional management game inspired by detailed grand-strategy map interfaces.
 
-A third-person 3D action shooter built with **Three.js**. Battle through
-**4 themed worlds** — City, Jungle, Ice, Space — defeat waves of enemies,
-collect upgrades, and face **epic bosses**.
+## Features
+- Procedurally textured terrain with forests, hills, a river and road network
+- Named settlements with selectable information panels
+- Regional administration and partner territory overlays
+- Logistics units and supply network overview
+- Turn-based resource management
+- Settlement development and supply dispatch orders
+- Pan, zoom and touch-friendly map controls
 
-## 🎮 Controls
-| Key | Action |
-|---|---|
-| WASD / Arrows | Move |
-| Mouse | Aim |
-| Left Click | Shoot |
-| Space | Jump |
-| Shift | Sprint |
-| 1-4 | Switch weapon |
-| R | Reload |
+## Play
+Open `index.html` in a modern browser or publish the repository with GitHub Pages.
 
-## 🔫 Weapons
-1. **Pistol** — Infinite ammo, reliable
-2. **Rifle** — Fast fire rate
-3. **Shotgun** — 6-pellet spread
-4. **Energy Cannon** — Massive damage
+Select settlements on the map, develop local services, dispatch supplies and end each day to receive new provisions.
 
-## 🌍 Levels
-1. **City Assault** — Neon-lit urban combat
-2. **Jungle Hunt** — Dense forest ambush
-3. **Ice Cavern** — Frozen crystal caves
-4. **Final Battle** — Space arena, hardest enemies
-
-## 🚀 Deploy on GitHub Pages
-1. Push all files to a GitHub repo
-2. Settings → Pages → Deploy from `main` branch
-3. Visit `https://YOURUSER.github.io/REPO/`
-
-## 🛠 Run Locally
-```bash
-npx --yes serve .
+This version focuses on non-combat regional planning and logistics.
